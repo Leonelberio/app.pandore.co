@@ -33,7 +33,7 @@ export const UserButton = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-40" align="end">
     <DropdownMenuItem>
-    <Link href="/web">
+    <Link href="/web/comparateurs">
 Mes comparateurs         
     </Link>
 </DropdownMenuItem>
