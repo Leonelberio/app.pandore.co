@@ -13,6 +13,7 @@ import { LoginButton } from "@/components/auth/login-button";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import HeaderFront from "./header-font";
 
 export default function AssurancesComponent() {
   const { data: session } = useSession(); // Access session data using useSession hook
@@ -47,26 +48,7 @@ export default function AssurancesComponent() {
   return (
     <div className="container mx-auto p-6 space-y-6">
       {/* Header */}
-      <header className="flex justify-between items-center py-6">
-        <div className="flex items-center space-x-4">
-          <Image src="/favicon.ico" alt="Logo" width={50} height={40} />
-        </div>
-        {session ? (
-          <div className="flex flex-row gap-2">
-          <LogoutButton asChild>
-            <Button size="lg">Se déconnecter</Button>
-          </LogoutButton>
-          <Link href="/web">
-          
-          <Button size="lg" variant="outline">Tableau de Bord</Button>
-          </Link>
-          </div>
-        ) : (
-          <LoginButton asChild>
-            <Button size="lg">Se connecter</Button>
-          </LoginButton>
-        )}
-      </header>
+    <HeaderFront/>
 
       {/* Title Section */}
       <section className="flex align-middle justify-center">

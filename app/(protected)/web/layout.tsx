@@ -101,7 +101,7 @@ export default async function AuthDashboardLayout({ children }: { children: Reac
                   Tableau de bord
                 </Link>
                 <Link
-                  href="/comparators"
+                  href="/web/comparators"
                   className="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
                 >
                   <Package className="h-5 w-5" />
@@ -115,7 +115,7 @@ export default async function AuthDashboardLayout({ children }: { children: Reac
                   Sources de données
                 </Link>
                 <Link
-                  href="/settings"
+                  href="/web/settings"
                   className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                 >
                   <Users className="h-5 w-5" />

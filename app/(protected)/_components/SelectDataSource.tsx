@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 // @ts-nocheck
 
 "use client";
@@ -44,7 +45,7 @@ export default function SelectDataSource({ params, sheets, setSheets, selectedDa
     if (!selectedDataSource) {
       handleSelectGoogleSheets();
     }
-  } )
+  }, [] )
 
   const handleSelectGoogleSheets = async () => {
     try {

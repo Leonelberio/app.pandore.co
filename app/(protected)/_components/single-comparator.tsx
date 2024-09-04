@@ -1,11 +1,12 @@
 // @ts-nocheck
+/* eslint-disable react-hooks/exhaustive-deps */
 
 
 "use client";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, Database, FileText, Sheet, Edit } from "lucide-react";
+import { ChevronLeft, Database, FileText, Sheet, Edit, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import Image from "next/image";
 import SelectDataSource from "./SelectDataSource";
+
 
 export function ComparatorDetailPage({ comparator }) {
   const [name, setName] = useState(comparator?.name || "");
@@ -33,7 +35,7 @@ export function ComparatorDetailPage({ comparator }) {
   useEffect(() => {
     fetchDataSources();
     checkAccessToken();
-  } );
+  }, [] );
 
   const fetchDataSources = async () => {
     try {
@@ -158,9 +160,20 @@ export function ComparatorDetailPage({ comparator }) {
             </Button>
           </Link>
           <div className="w-full flex justify-between gap-4">
+            <div className="flex gap-2">
+
             <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
               {name}
             </h1>
+             {/* New Link to open the comparator view in a new tab */}
+             <Link href={`/web/comparators/${comparator.id}/views?v=compare`} target="_blank" className="text-purple-600">
+              <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                Voir le comparateur
+                <ExternalLink className="h-4 w-4" />
+              </Button>
+            </Link>
+            </div>
+
             <Button
               size="sm"
               onClick={handleSave}

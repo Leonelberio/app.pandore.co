@@ -14,6 +14,7 @@ import { LogoutButton } from "@/components/auth/logout-button";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { Banknote, ShieldCheck, Users } from "lucide-react";
+import HeaderFront from "./header-font";
 
 export default function HomeComponent() {
   const { data: session } = useSession(); // Access session data using useSession hook
@@ -23,51 +24,21 @@ export default function HomeComponent() {
   const [price, setPrice] = useState("Any Prices");
   const router = useRouter();
 
-  useEffect(() => {
-    // Fetch the comparators data from the backend
-    fetch("/api/comparators/all")
-      .then((res) => res.json())
-      .then((data) => setComparators(data.comparators))
-      .catch((error) => console.error("Error fetching comparators:", error));
-  }, []);
 
-  const handleCardClick = (id) => {
-    // Navigate to the comparator's detailed view
-    router.push(`/web/comparators/${id}/views/compare`);
-  };
+
+
 
   const handleCreateComparator = () => {
     router.push("/web/comparators/new");
   };
 
 
-  const showDashBoard = () => {
-    router.push("/web");
-  };
+
 
   return (
     <div className="container mx-auto p-6 space-y-6">
       {/* Header */}
-      <header className="flex justify-between items-center py-6">
-        <div className="flex items-center space-x-4">
-          <Image src="/favicon.ico" alt="Logo" width={50} height={40} />
-        </div>
-        {session ? (
-          <div className="flex flex-row gap-2">
-          <LogoutButton asChild>
-            <Button size="lg">Se déconnecter</Button>
-          </LogoutButton>
-          <Link href="/web">
-          
-          <Button size="lg" variant="outline">Tableau de Bord</Button>
-          </Link>
-          </div>
-        ) : (
-          <LoginButton asChild>
-            <Button size="lg">Se connecter</Button>
-          </LoginButton>
-        )}
-      </header>
+      <HeaderFront/>
 
       {/* Title Section */}
       <section className="flex align-middle justify-center">

@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import React, { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
+import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -11,40 +11,77 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { DataCombobox } from "./data-combobox"
-import { CriteriaCombobox } from "./criteria-combobox"
+} from "@/components/ui/table";
+import { DataCombobox } from "./data-combobox";
+import { CriteriaCombobox } from "./criteria-combobox";
 
 interface DataComparatorProps {
-  selectedColumns: string[] // Received from previous step
-  selectedRows: string[] // New prop for selected rows
-  title: string
-  placeholder: string
+  selectedColumns: string[]; // Received from the previous step (criteria)
+  selectedRows: string[]; // Received from the previous step (options/rows)
+  cellData: { [key: string]: string[] }; // New prop for storing cell values (column -> array of values)
+  title: string;
+  placeholder: string;
 }
 
 export function DataComparator({
   selectedColumns,
-  selectedRows, // Add selected rows here
+  selectedRows,
+  cellData,
   title,
   placeholder,
 }: DataComparatorProps) {
-  const [selectedOptions, setSelectedOptions] = useState<string[]>(selectedRows) // Initialize with selectedRows
-  const [selectedCriteria, setSelectedCriteria] = useState<string[]>(selectedColumns) // Initialize with selectedColumns
-  const [showComparison, setShowComparison] = useState(false)
+  const [selectedOptions, setSelectedOptions] = useState<string[]>(() => {
+    return JSON.parse(localStorage.getItem("selectedOptions") || "[]");
+  });
+  const [selectedCriteria, setSelectedCriteria] = useState<string[]>(() => {
+    return JSON.parse(localStorage.getItem("selectedCriteria") || "[]");
+  });
+  const [showComparison, setShowComparison] = useState<boolean>(() => {
+    return JSON.parse(localStorage.getItem("showComparison") || "false");
+  });
+  const [storedCellData, setStoredCellData] = useState<{ [key: string]: string[] }>(() => {
+    return JSON.parse(localStorage.getItem("cellData") || "{}");
+  });
+
+  // Save selected options (rows) to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("selectedOptions", JSON.stringify(selectedOptions));
+  }, [selectedOptions]);
+
+  // Save selected criteria (columns) to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("selectedCriteria", JSON.stringify(selectedCriteria));
+  }, [selectedCriteria]);
+
+  // Save the showComparison flag to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("showComparison", JSON.stringify(showComparison));
+  }, [showComparison]);
+
+  // Save the cell data to localStorage whenever it changes
+  useEffect(() => {
+    if (showComparison) {
+      localStorage.setItem("cellData", JSON.stringify(cellData));
+    }
+  }, [cellData, showComparison]);
+
+  // Function to enable or disable the Compare button
+  const isCompareDisabled = () => {
+    return selectedOptions.length === 0 || selectedCriteria.length === 0;
+  };
 
   const handleCompare = () => {
-    if (selectedOptions.length > 0) {
-      setShowComparison(true)
-    } else {
-      alert("Please select at least one option to compare.")
+    if (selectedOptions.length > 0 && selectedCriteria.length > 0) {
+      setShowComparison(true);
     }
-  }
+  };
 
   const handleCriteriaChange = (newCriteria: string[]) => {
-    setSelectedCriteria(newCriteria)
-  }
+    setSelectedCriteria(newCriteria);
+  };
 
   const renderComparisonTable = () => {
+    const dataToShow = showComparison ? cellData : storedCellData;
     return (
       <div className="overflow-x-auto">
         <Table className="min-w-full">
@@ -64,7 +101,11 @@ export function DataComparator({
               <TableRow key={index}>
                 <TableCell>{criterion}</TableCell>
                 {selectedOptions.map((option, optIndex) => (
-                  <TableCell key={optIndex}>{/* Show relevant data here */}</TableCell>
+                  <TableCell key={optIndex}>
+                    {dataToShow[criterion] && dataToShow[criterion][optIndex]
+                      ? dataToShow[criterion][optIndex]
+                      : "N/A"}
+                  </TableCell>
                 ))}
               </TableRow>
             ))}
@@ -78,8 +119,8 @@ export function DataComparator({
           </TableFooter>
         </Table>
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <div className="p-6">
@@ -105,12 +146,16 @@ export function DataComparator({
 
         {/* Compare button */}
         <div className="w-full md:w-1/5">
-          <Button onClick={handleCompare} className="w-full">
+          <Button
+            onClick={handleCompare}
+            className="w-full"
+            disabled={isCompareDisabled()} // Disable if no rows/columns selected
+          >
             Compare
           </Button>
         </div>
       </div>
       {showComparison && renderComparisonTable()}
     </div>
-  )
+  );
 }

@@ -111,3 +111,64 @@ export async function getCachedSheetData(sheetId: string, oauth2Client: any): Pr
 
   return columns
 }
+
+async function fetchGoogleSheetDataWithOAuth(sheetId, range, accessToken) {
+  try {
+    // Initialize Google Sheets API client with OAuth token
+    const sheets = google.sheets({ version: "v4", auth: accessToken });
+
+    // Fetch data from Google Sheets
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId: sheetId,
+      range: range, // Example: "Sheet1!A1:D10"
+    });
+
+    return response.data.values; // The cell values
+  } catch (error) {
+    console.error("Error fetching data from Google Sheets:", error);
+    throw error;
+  }
+}
+
+// Function to get sheet data with accessToken
+export async function getSheetData(sheetId, range, accessToken) {
+  const cacheKey = `${sheetId}_${range}`;
+
+  // Check if data is already in cache
+  const cachedData = cache.get(cacheKey);
+
+  if (cachedData) {
+    // Check if the sheet has been updated since the data was cached
+    const lastModified = await getSheetLastModifiedTime(sheetId, accessToken);
+    if (cachedData.lastModified === lastModified) {
+      // Return cached data if not updated
+      return cachedData.values;
+    }
+  }
+
+  // Fetch fresh data if cache is empty or sheet has been updated
+  const values = await fetchGoogleSheetDataWithOAuth(sheetId, range, accessToken);
+  const lastModified = await getSheetLastModifiedTime(sheetId, accessToken);
+
+  // Store the fetched data in the cache
+  cache.set(cacheKey, { values, lastModified });
+
+  return values;
+}
+
+// Helper to get the last modified time of the sheet using OAuth access token
+async function getSheetLastModifiedTime(sheetId, accessToken) {
+  try {
+    const sheets = google.sheets({ version: "v4", auth: accessToken });
+
+    const response = await sheets.spreadsheets.get({
+      spreadsheetId: sheetId,
+      fields: "properties.modifiedTime",
+    });
+
+    return response.data.properties.modifiedTime;
+  } catch (error) {
+    console.error("Error fetching sheet metadata:", error);
+    throw error;
+  }
+}

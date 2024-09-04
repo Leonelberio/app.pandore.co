@@ -72,7 +72,7 @@ export function CriteriaCombobox({
             <CommandGroup>
               {/* "Select All" option */}
               <CommandItem onSelect={toggleSelectAll} className="flex items-center cursor-pointer">
-                Select All
+                Selectionner tout
                 <CheckIcon
                   className={cn(
                     "ml-auto h-4 w-4",
