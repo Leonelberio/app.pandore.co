@@ -5,6 +5,7 @@
  */
 export const publicRoutes = [
   "/",
+  "/assurances",
   "/auth/new-verification",
   '/api/comparators/all'
 ];
