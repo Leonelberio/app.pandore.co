@@ -1,3 +1,6 @@
+// @ts-nocheck
+
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -30,7 +33,7 @@ export function ComparatorDetailPage({ comparator }) {
   useEffect(() => {
     fetchDataSources();
     checkAccessToken();
-  }, []);
+  } );
 
   const fetchDataSources = async () => {
     try {

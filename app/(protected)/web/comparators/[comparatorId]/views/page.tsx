@@ -33,7 +33,7 @@ export default function ViewsTabs() {
     }
   }, [comparatorId, router, searchParams]);
 
-  const handleTabChange = (value) => {
+  const handleTabChange = (value:string) => {
     router.push(`/web/comparators/${comparatorId}/views?v=${value}`);
   };
 

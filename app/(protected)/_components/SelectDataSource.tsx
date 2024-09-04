@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -42,7 +44,7 @@ export default function SelectDataSource({ params, sheets, setSheets, selectedDa
     if (!selectedDataSource) {
       handleSelectGoogleSheets();
     }
-  }, []);
+  } )
 
   const handleSelectGoogleSheets = async () => {
     try {

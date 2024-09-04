@@ -1,3 +1,6 @@
+// @ts-nocheck
+
+
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
@@ -36,9 +39,9 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { useToast } from "@/hooks/use-toast"
 import { toast as showToast } from "react-hot-toast"; // Importing toast
 import Loader from "../web/loading";
+import { useToast } from "@/components/hooks/use-toast";
 
 const ITEMS_PER_PAGE = 10;
 

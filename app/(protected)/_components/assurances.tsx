@@ -13,9 +13,8 @@ import { LoginButton } from "@/components/auth/login-button";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { Banknote, ShieldCheck, Users } from "lucide-react";
 
-export default function HomeComponent() {
+export default function AssurancesComponent() {
   const { data: session } = useSession(); // Access session data using useSession hook
   const [comparators, setComparators] = useState([]);
   const [place, setPlace] = useState("Any Type");
@@ -31,7 +30,7 @@ export default function HomeComponent() {
       .catch((error) => console.error("Error fetching comparators:", error));
   }, []);
 
-  const handleCardClick = (id) => {
+  const handleCardClick = (id:number) => {
     // Navigate to the comparator's detailed view
     router.push(`/web/comparators/${id}/views/compare`);
   };
@@ -73,52 +72,74 @@ export default function HomeComponent() {
       <section className="flex align-middle justify-center">
         <div className="flex flex-col gap-6 text-center pt-16 pb-4 max-w-3xl">
           <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-            Faites le meilleur choix avec nos
-            <span className="text-purple-600"> comparateurs.</span>
+            Faites le meilleur choix avec nos comparateurs
+            <span className="text-purple-600"> des Assurances.</span>
           </h1>
           <p className="leading-7">Explorez nos outils de comparaison pour trouver ce qui vous convient le mieux.</p>
         </div>
       </section>
 
-     
-     {/* Centered Cards Section */}
-     <div className="flex justify-center gap-10">
-        {/* Assurances Card */}
-        <Link href="/assurances" passHref>
-          <Card className="cursor-pointer max-w-xs shadow-lg hover:shadow-xl transition">
-            <CardContent className="p-6 flex flex-col items-center">
-              <ShieldCheck size={60} className="text-purple-600 mb-4" />
-              <CardHeader>
-                <CardTitle className="text-xl">Assurances</CardTitle>
-              </CardHeader>
-            </CardContent>
-          </Card>
-        </Link>
+      {/* Filters Section */}
+      <div className="flex justify-center items-center space-x-4">
+        <Select onValueChange={setPlace} defaultValue="Any Type">
+          <SelectTrigger className="w-40">
+            <SelectValue placeholder="Select Place" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="Any Type">Tout</SelectItem>
+            <SelectItem value="Stadium">Filtre 00</SelectItem>
+            <SelectItem value="Gym">Filtre 01</SelectItem>
+          </SelectContent>
+        </Select>
 
-        {/* Banques Card */}
-        <Link href="#" passHref>
-          <Card className="cursor-pointer max-w-xs shadow-lg hover:shadow-xl transition">
-            <CardContent className="p-6 flex flex-col items-center">
-              <Banknote size={60} className="text-purple-600 mb-4" />
-              <CardHeader>
-                <CardTitle className="text-xl">Banques</CardTitle>
-              </CardHeader>
-            </CardContent>
-          </Card>
-        </Link>
+        <Select onValueChange={setAccessory} defaultValue="Any Type">
+          <SelectTrigger className="w-40">
+            <SelectValue placeholder="Accessories Type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="Any Type">Tout</SelectItem>
+            <SelectItem value="Footballs">Filtre 01</SelectItem>
+            <SelectItem value="T Shirts">Filtre 02</SelectItem>
+            <SelectItem value="Shoes">Filtre 03</SelectItem>
+          </SelectContent>
+        </Select>
 
-        {/* Influenceurs Card */}
-        <Link href="#" passHref>
-          <Card className="cursor-pointer max-w-xs shadow-lg hover:shadow-xl transition">
-            <CardContent className="p-6 flex flex-col items-center">
-              <Users size={60} className="text-purple-600 mb-4" />
-              <CardHeader>
-                <CardTitle className="text-xl">Influenceurs</CardTitle>
-              </CardHeader>
-            </CardContent>
-          </Card>
-        </Link>
+       
+
+        <Button size="lg" variant="outline">
+          Filtrer
+        </Button>
       </div>
+
+      {/* Products Section */}
+      {comparators.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {comparators.map((comparator) => (
+            <Card key={comparator.id} onClick={() => handleCardClick(comparator.id)} className="cursor-pointer">
+              <CardContent className="p-4">
+                <Image
+                  src={comparator.logo || "placeholder.svg"}
+                  alt={comparator.name}
+                  className="aspect-square w-full rounded-md object-contain"
+                  width={300}
+                  height={300}
+                />
+                <CardHeader className="mt-4">
+                  <CardTitle>{comparator.name}</CardTitle>
+                  <CardDescription>{comparator.description}</CardDescription>
+                </CardHeader>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-col items-center justify-center py-20">
+          <p className="text-lg font-semibold mb-6">Aucun comparateur</p>
+          <Button onClick={handleCreateComparator} size="lg" variant="outline">
+            Créer un comparateur
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
