@@ -33,7 +33,7 @@ export default function AssurancesComponent() {
 
   const handleCardClick = (id:number) => {
     // Navigate to the comparator's detailed view
-    router.push(`/web/comparators/${id}/views/compare`);
+    router.push(`/web/comparators/${id}/views?v=compare`);
   };
 
   const handleCreateComparator = () => {
