@@ -54,8 +54,8 @@ export default function AssurancesComponent() {
       <section className="flex align-middle justify-center">
         <div className="flex flex-col gap-6 text-center pt-16 pb-4 max-w-3xl">
           <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-            Faites le meilleur choix avec nos comparateurs
-            <span className="text-purple-600"> des Assurances.</span>
+            Les outils pour choisir la meilleure
+            <span className="text-purple-600"> Assurance.</span>
           </h1>
           <p className="leading-7">Explorez nos outils de comparaison pour trouver ce qui vous convient le mieux.</p>
         </div>
